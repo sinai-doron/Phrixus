@@ -10,6 +10,9 @@ testDB/db/*
 coverage.html
 # Created by https://www.gitignore.io
 
+#ignore local config
+config/local.json
+
 #ignore documentation
 doc
 
