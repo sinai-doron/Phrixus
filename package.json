@@ -1,0 +1,27 @@
+{
+  "name": "phrixus",
+  "version": "1.0.0",
+  "description": "Get data from thetvdb and store it to mongo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Doron Sinai",
+  "license": "ISC",
+  "dependencies": {
+    "cynwrig": "0.0.3",
+    "jsdom": "^3.1.2",
+    "jszip": "^2.5.0",
+    "lodash": "^3.10.1",
+    "mkdirp": "^0.5.1",
+    "moment": "^2.10.6",
+    "mongoose": "^4.1.10",
+    "node-tvdb": "^1.4.0",
+    "nodemailer": "^1.7.0",
+    "nodemailer-smtp-transport": "^1.0.3",
+    "request": "^2.64.0",
+    "winston": "^1.0.2",
+    "xml2js": "^0.4.12",
+    "zlibjs": "^0.2.0"
+  }
+}
