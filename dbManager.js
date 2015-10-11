@@ -278,6 +278,19 @@ function findEpisodeBetweenDates(start, end){
     });
 }
 
+function findEpisodesByShowIdAndSeason(showId, seasonNumber, cb){
+    return new Promise(function (resolve, reject) {
+        Episode.find({SeasonNumber:seasonNumber, seriesid:showId},function(err, episodes){
+            if(err){
+                return reject(err);
+            }
+            addUrlandSeriesName(episodes).then(function(data){
+                resolve(data);
+            })
+        });
+    }).nodeify(cb);
+}
+
 function addUrlandSeriesName(episodes){
     return new Promise(function(resolve, reject){
         var query = Show.find({});
@@ -317,6 +330,17 @@ function addUrlToShow(id, url){
             });
         });
     });
+}
+
+function getAllShows(fields, cb){
+    return new Promise(function (resolve, reject) {
+        Show.find({},fields, function(err, shows){
+            if(err){
+                return reject(err);
+            }
+            resolve(shows);
+        });
+    }).nodeify(cb);
 }
 
 function updateDb(interval){
@@ -386,5 +410,7 @@ module.exports = {
     findEpisodeBetweenDates:findEpisodeBetweenDates,
     updateDb:updateDb,
     getEpisodeById:getEpisodeById,
-    addUrlToShow:addUrlToShow
+    addUrlToShow:addUrlToShow,
+    getAllShows:getAllShows,
+    findEpisodesByShowIdAndSeason:findEpisodesByShowIdAndSeason
 }

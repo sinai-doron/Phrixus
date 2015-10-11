@@ -1,3 +1,4 @@
+#!/usr/local/bin/ node
 var dbManager = require("./dbManager");
 var cynwrig = require("cynwrig");
 var moment = require("moment");
@@ -59,10 +60,10 @@ function sendMail(mailData){
         }
     });
 }
-dbManager.updateDb("day");
-dbManager.findEpisodeBetweenDates(moment().subtract(1, "days")).then(function(results){
+
+function startEpisodesDownloadAndSendMail(episodes){
     var promises = [];
-    _.forEach(results,function(r){
+    _.forEach(episodes,function(r){
         var p = kickass.getEpisodeTorrent(r.url, r["SeasonNumber"], r["EpisodeNumber"], r.name);
         promises.push(p);
     });
@@ -91,10 +92,20 @@ dbManager.findEpisodeBetweenDates(moment().subtract(1, "days")).then(function(re
             mailData["text"] += f + "\n";
         });
         sendMail(mailData);
+        console.log("Mail sent");
     });
-//    console.log(results);getEpisodeById
-});
-//kickass.getEpisodeTorrent("https://kat.cr/zoo-tv22540/", "1", "2", "Zoo");
+}
+//https://kat.cr/rizzoli-isles-tv11750/
+//dbManager.addUrlToShow(161461, "https://kat.cr/rizzoli-isles-tv11750/");
+dbManager.findEpisodesByShowIdAndSeason(161461, 4).then(function(episodes){
+    startEpisodesDownloadAndSendMail(episodes);
+})
+
+
+//dbManager.updateDb("day");
+//dbManager.findEpisodeBetweenDates(moment().subtract(14, "days")).then(function(results){
+//    startEpisodesDownloadAndSendMail(results);
+//});
 
 
 

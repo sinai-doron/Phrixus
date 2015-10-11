@@ -138,6 +138,7 @@ function getEpisodeSegment(segmentNumber, seriesName){
                     if(!torrentFileA || (torrentFileA.length === 0)){
                         return reject("No torrent File A was found for "+ segmentNumber + "in show " + seriesName);
                     }
+                    console.log("Torrent url found: " + torrentFileA[0].href);
                     resolve(torrentFileA[0].href);
                 }
             });
@@ -153,7 +154,12 @@ function getEpisodeTorrent(url, seasonNumber, episodeNumber, seriesName){
         }
         getEpisodeSegmentFromSeriesPage(url, seasonNumber, episodeNumber, seriesName).then(function(data){
             getEpisodeSegment(data, seriesName).then(function(data){
-                data = data.replace("file:////", "http://");
+                    if(data.startsWith("file:////")){
+                        data = data.replace("file:////", "http://");
+                    }
+                    else if(data.startsWith("//")){
+                        data = data.replace("//", "http://");
+                    }
                 console.log(data);
                 downloadFile(data, seriesName, "" +seriesName+seasonNumber+episodeNumber + ".torrent").then(
                     function(fileName){
