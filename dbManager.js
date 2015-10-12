@@ -11,9 +11,9 @@ var moment = require("moment");
 var Promise = require('bluebird');
 
 function findSeries(name, cb){
-    tvdb.getSeriesByName(name).then(function(data){
-        cb(data);
-    });
+    return new Promise(function (resolve, reject) {
+        resolve(tvdb.getSeriesByName(name));
+    }).nodeify(cb);
 }
 
 function getEpisodeById(id){
@@ -343,6 +343,19 @@ function getAllShows(fields, cb){
     }).nodeify(cb);
 }
 
+function getShowById(id, cb){
+    return new Promise(function (resolve, reject) {
+        Show.findById(id)
+            .populate('episodes', null, null, {sort:{'season':1, 'episodeNumber':1}})
+            .exec(function(err, show) {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(show);
+            });
+    }).nodeify(cb);
+}
+
 function updateDb(interval){
     return new Promise(function(resolve, reject){
         tvdb.getUpdatesForInterval(interval.toLowerCase()).then(
@@ -412,5 +425,6 @@ module.exports = {
     getEpisodeById:getEpisodeById,
     addUrlToShow:addUrlToShow,
     getAllShows:getAllShows,
-    findEpisodesByShowIdAndSeason:findEpisodesByShowIdAndSeason
+    findEpisodesByShowIdAndSeason:findEpisodesByShowIdAndSeason,
+    getShowById:getShowById
 }
